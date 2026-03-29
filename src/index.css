@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #9b3f00;
+  --color-on-primary: #fff0ea;
+  --color-primary-container: #ff7a2c;
+  --color-on-primary-container: #401600;
+  --color-secondary: #004be2;
+  --color-on-secondary: #f2f1ff;
+  --color-secondary-container: #c5d0ff;
+  --color-on-secondary-container: #003ab4;
+  --color-tertiary: #006a28;
+  --color-on-tertiary: #cfffce;
+  --color-tertiary-container: #5cfd80;
+  --color-on-tertiary-container: #005d22;
+  --color-error: #b02500;
+  --color-on-error: #ffefec;
+  --color-error-container: #f95630;
+  --color-on-error-container: #520c00;
+  --color-background: #fff4ef;
+  --color-on-background: #4a2506;
+  --color-surface: #fff4ef;
+  --color-on-surface: #4a2506;
+  --color-surface-variant: #ffd4b9;
+  --color-on-surface-variant: #7f512e;
+  --color-outline: #9e6b46;
+  --color-outline-variant: #dba177;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #ffede4;
+  --color-surface-container: #ffe3d1;
+  --color-surface-container-high: #ffdcc5;
+  --color-surface-container-highest: #ffd4b9;
+  
+  --font-headline: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+@layer utilities {
+  .editorial-shadow {
+    box-shadow: 0 20px 40px -15px rgba(74, 37, 6, 0.08);
+  }
+  .editorial-shadow-hover {
+    box-shadow: 0 30px 50px -15px rgba(74, 37, 6, 0.12);
+  }
+  .glass-panel {
+    background: rgba(255, 244, 239, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .stamp-like {
+    border: 8px solid #9b3f00;
+    color: #9b3f00;
+    text-transform: uppercase;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    transform: rotate(-15deg);
+  }
+  .nope-stamp {
+    border: 8px solid #b02500;
+    color: #b02500;
+    padding: 4px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transform: rotate(-15deg);
+    border-radius: 12px;
+    opacity: 0.9;
+  }
+}
