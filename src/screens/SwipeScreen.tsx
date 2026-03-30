@@ -305,8 +305,6 @@ export default function SwipeScreen() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [swiped, setSwiped] = useState<string | null>(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [showMatch, setShowMatch] = useState(false);
-  const [matchedRoom, setMatchedRoom] = useState<typeof ROOMS[0] | null>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const controls = useAnimation();
@@ -324,13 +322,7 @@ export default function SwipeScreen() {
     if (info.offset.x > threshold || velocity > 500) {
       setSwiped('right');
       await controls.start({ x: 500, opacity: 0, transition: { duration: 0.3, ease: "easeOut" } });
-      
-      // 40% chance of matching
-      if (Math.random() > 0.6) {
-        triggerMatch(ROOMS[currentIndex]);
-      } else {
-        nextCard();
-      }
+      nextCard();
     } else if (info.offset.x < -threshold || velocity < -500) {
       setSwiped('left');
       await controls.start({ x: -500, opacity: 0, transition: { duration: 0.3, ease: "easeOut" } });
@@ -338,19 +330,6 @@ export default function SwipeScreen() {
     } else {
       controls.start({ x: 0, y: 0, transition: { type: 'spring', stiffness: 400, damping: 25 } });
     }
-  };
-
-  const triggerMatch = (room: typeof ROOMS[0]) => {
-    setMatchedRoom(room);
-    setShowMatch(true);
-  };
-
-  const closeMatch = () => {
-    setShowMatch(false);
-    setTimeout(() => {
-      setMatchedRoom(null);
-      nextCard();
-    }, 300);
   };
 
   const nextCard = () => {
@@ -380,13 +359,7 @@ export default function SwipeScreen() {
     setSwiped(direction);
     if (direction === 'right') {
       await controls.start({ x: 500, rotate: 15, opacity: 0, transition: { duration: 0.3 } });
-      
-      // 40% chance of matching
-      if (Math.random() > 0.6) {
-        triggerMatch(ROOMS[currentIndex]);
-      } else {
-        nextCard();
-      }
+      nextCard();
     } else {
       await controls.start({ x: -500, rotate: -15, opacity: 0, transition: { duration: 0.3 } });
       nextCard();
@@ -549,78 +522,6 @@ export default function SwipeScreen() {
           <span className="material-symbols-outlined text-4xl">star</span>
         </button>
       </div>
-
-      {/* Match Overlay */}
-      <AnimatePresence>
-        {showMatch && matchedRoom && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center px-6"
-          >
-            <motion.div
-              initial={{ scale: 0.5, opacity: 0, rotate: -10 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              transition={{ type: "spring", damping: 15, stiffness: 200, delay: 0.1 }}
-              className="text-center mb-10"
-            >
-              <h1 className="text-6xl font-headline font-black text-transparent bg-clip-text bg-gradient-to-r from-[#F27D26] to-[#FCDCC4] italic tracking-tighter drop-shadow-[0_0_15px_rgba(242,125,38,0.5)]">
-                It's a Match!
-              </h1>
-              <p className="text-white/80 mt-4 text-lg">You and the host liked each other.</p>
-            </motion.div>
-
-            <div className="flex items-center justify-center gap-4 mb-12">
-              <motion.div
-                initial={{ x: -50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ type: "spring", delay: 0.3 }}
-                className="w-28 h-28 rounded-full border-4 border-[#F27D26] overflow-hidden shadow-[0_0_30px_rgba(242,125,38,0.4)]"
-              >
-                <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="You" className="w-full h-full object-cover" />
-              </motion.div>
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", delay: 0.5 }}
-                className="w-12 h-12 bg-white rounded-full flex items-center justify-center z-10 -mx-8 shadow-lg"
-              >
-                <span className="material-symbols-outlined text-[#F27D26] text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>favorite</span>
-              </motion.div>
-              <motion.div
-                initial={{ x: 50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ type: "spring", delay: 0.4 }}
-                className="w-28 h-28 rounded-full border-4 border-white overflow-hidden shadow-lg"
-              >
-                <img src={matchedRoom.images[0]} alt="Room" className="w-full h-full object-cover" />
-              </motion.div>
-            </div>
-
-            <motion.div
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="w-full max-w-sm space-y-4"
-            >
-              <button 
-                onClick={closeMatch}
-                className="w-full py-4 bg-gradient-to-r from-[#F27D26] to-[#E06B15] text-white rounded-full font-bold text-lg shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
-              >
-                <span className="material-symbols-outlined">chat</span>
-                Send a Message
-              </button>
-              <button 
-                onClick={closeMatch}
-                className="w-full py-4 bg-white/10 text-white rounded-full font-bold text-lg backdrop-blur-md hover:bg-white/20 active:scale-95 transition-all"
-              >
-                Keep Swiping
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Details Modal */}
       <AnimatePresence>
